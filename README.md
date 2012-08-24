@@ -9,7 +9,7 @@ What is MetaSyntactical/Io?
 MetaSyntactical/Io is part of the MetaSyntactical PHP 5.3+ components library and allows
 to read primitive types from streams and files.
 
-MetaSyntactical/Mime is based on the [Zend Framework proposal][1] for
+MetaSyntactical/Io is based on the [Zend Framework proposal][1] for
 Zend_Mime_Magic of Matthew Ratzloff and the derived implementation as [Google Code project][2]
 of Sven Vollbehr.
 I have transformed the code to use namespaces, better exception handling and added a lot of
