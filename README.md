@@ -1,7 +1,7 @@
 README
 ======
 
-[![Build Status](https://secure.travis-ci.org/metasyntactical/io.png?branch=master)](http://travis-ci.org/metasyntactical/io)
+[![Build Status](https://secure.travis-ci.org/MetaSyntactical/Io.png?branch=master)](http://travis-ci.org/MetaSyntactical/Io)
 
 What is MetaSyntactical/Io?
 -----------------------------
