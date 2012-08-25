@@ -358,8 +358,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
         self::assertEquals(12592, $this->object->readInt16LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-32384, $this->advancedObject->readInt16LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(16704, $this->advancedObject->readInt16LE());
     }
 
     /**
@@ -375,8 +375,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
         self::assertEquals(12337, $this->object->readInt16LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-32639, $this->advancedObject->readInt16LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(16449, $this->advancedObject->readInt16LE());
     }
 
     /**
@@ -436,8 +436,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt16LittleEndianReturnsExpectedValues()
     {
         self::assertEquals(12592, $this->object->readUInt16LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(33152, $this->advancedObject->readUInt16LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(16704, $this->advancedObject->readUInt16LE());
     }
 
     /**
@@ -447,8 +447,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt16BigEndianReturnsExpectedValues()
     {
         self::assertEquals(12337, $this->object->readUInt16BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(32897, $this->advancedObject->readUInt16BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(16449, $this->advancedObject->readUInt16BE());
     }
 
     /**
@@ -458,8 +458,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt16ReturnsExpectedValues()
     {
         self::assertEquals(12592, $this->object->readUInt16());
-        $this->advancedObject->skip(128);
-        self::assertEquals(33152, $this->advancedObject->readUInt16());
+        $this->advancedObject->skip(64);
+        self::assertEquals(16704, $this->advancedObject->readUInt16());
     }
 
     /**
@@ -474,8 +474,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
         self::assertEquals(842084352, $this->object->readInt24LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2105442304, $this->advancedObject->readInt24LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1111572480, $this->advancedObject->readInt24LE());
     }
 
     /**
@@ -490,8 +490,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
         self::assertEquals(3158322, $this->object->readInt24LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(8421762, $this->advancedObject->readInt24LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(4211010, $this->advancedObject->readInt24LE());
     }
 
     /**
@@ -506,8 +506,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
         self::assertEquals(808530432, $this->object->readInt24BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2138996224, $this->advancedObject->readInt24BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1078018560, $this->advancedObject->readInt24BE());
     }
 
     /**
@@ -522,8 +522,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
         self::assertEquals(3289392, $this->object->readInt24BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(8552832, $this->advancedObject->readInt24BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(4342080, $this->advancedObject->readInt24BE());
     }
 
     /**
@@ -542,8 +542,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt24LittleEndianReturnsExpectedValues()
     {
         self::assertEquals(842084352, $this->object->readUInt24LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals('2189524992', (string)$this->advancedObject->readUInt24LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1111572480, $this->advancedObject->readUInt24LE());
     }
 
     /**
@@ -553,8 +553,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt24BigEndianReturnsExpectedValues()
     {
         self::assertEquals(3158322, $this->object->readUInt24BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(8421762, $this->advancedObject->readUInt24BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(4211010, $this->advancedObject->readUInt24BE());
     }
 
     /**
@@ -564,8 +564,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadingUnsignedInt24ReturnsExpectedValues()
     {
         self::assertEquals(842084352, $this->object->readUInt24());
-        $this->advancedObject->skip(128);
-        self::assertEquals('2189524992', (string)$this->advancedObject->readUInt24());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1111572480, $this->advancedObject->readUInt24());
     }
 
     /**
@@ -580,8 +580,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
         self::assertEquals(858927408, $this->object->readInt32LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2088599168, $this->advancedObject->readInt32LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1128415552, $this->advancedObject->readInt32LE());
     }
 
     /**
@@ -596,8 +596,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
         self::assertEquals(808530483, $this->object->readInt32LE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2138996093, $this->advancedObject->readInt32LE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1078018627, $this->advancedObject->readInt32LE());
     }
 
     /**
@@ -612,8 +612,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
         self::assertEquals(808530483, $this->object->readInt32BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2138996093, $this->advancedObject->readInt32BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1078018627, $this->advancedObject->readInt32BE());
     }
 
     /**
@@ -628,8 +628,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
         self::assertEquals(858927408, $this->object->readInt32BE());
-        $this->advancedObject->skip(128);
-        self::assertEquals(-2088599168, $this->advancedObject->readInt32BE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(1128415552, $this->advancedObject->readInt32BE());
     }
 
     /**
