@@ -118,7 +118,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         unset($this->advancedObjectWithNullBytes);
     }
 
-    public function testThatReaderFailsConstructionIfProvidedDiscriminatorIsNoStreamResource()
+    public function testReaderFailsConstructionIfProvidedDiscriminatorIsNoStreamResource()
     {
         $this->setExpectedException(
             'MetaSyntactical\\Io\\Exception\\InvalidResourceTypeException',
@@ -130,7 +130,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::available
      */
-    public function testThatAvailableReturnsTrueIfDataAvailable()
+    public function testAvailableReturnsTrueIfDataAvailable()
     {
         self::assertTrue($this->object->available());
     }
@@ -138,7 +138,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::available
      */
-    public function testThatAvailableReturnsFalseIfNoMoreDataAvailable()
+    public function testAvailableReturnsFalseIfNoMoreDataAvailable()
     {
         fseek($this->fp, 0, SEEK_END);
         self::assertFalse($this->object->available());
@@ -147,7 +147,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::available
      */
-    public function testThatAvailableThrowsExpectedExceptionIfStreamHasBeenClosedFromOutside()
+    public function testAvailableThrowsExpectedExceptionIfStreamHasBeenClosedFromOutside()
     {
         fclose($this->fp);
         $this->setExpectedException(
@@ -161,7 +161,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::available
      * @covers MetaSyntactical\Io\Reader::checkStreamAvailable
      */
-    public function testThatAvailableThrowsExpectedExceptionIfStreamHasBeenClosedByInterfaceMethod()
+    public function testAvailableThrowsExpectedExceptionIfStreamHasBeenClosedByInterfaceMethod()
     {
         $this->object->close();
         $this->setExpectedException(
@@ -216,7 +216,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::getSize
      */
-    public function testThatGetSizeReturnsTheCorrectStreamSize()
+    public function testGetSizeReturnsTheCorrectStreamSize()
     {
         self::assertEquals(128, $this->object->getSize());
     }
@@ -224,7 +224,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::getFileDescriptor
      */
-    public function testThatGetFileDescriptorReturnsTheOriginalFileDescriptor()
+    public function testGetFileDescriptorReturnsTheOriginalFileDescriptor()
     {
         self::assertEquals($this->fp, $this->object->getFileDescriptor());
     }
@@ -232,7 +232,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::skip
      */
-    public function testThatSkipWillSkipGivenNumberOfBytes()
+    public function testSkipWillSkipGivenNumberOfBytes()
     {
         $this->object->skip(10);
         self::assertEquals(10, ftell($this->fp));
@@ -243,7 +243,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::skip
      */
-    public function testThatSkippingZeroNumberOfBytesDoesNotChangeTheFilePointer()
+    public function testSkippingZeroNumberOfBytesDoesNotChangeTheFilePointer()
     {
         $this->object->skip(0);
         self::assertEquals(0, ftell($this->fp));
@@ -256,7 +256,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::skip
      */
-    public function testThatSkipThrowsExpectedExceptionIfTryingToSkipNegativeValue()
+    public function testSkipThrowsExpectedExceptionIfTryingToSkipNegativeValue()
     {
         fseek($this->fp, 0, SEEK_END);
         $this->setExpectedException(
@@ -269,7 +269,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadReturnsTheCorrectValueBeforeChangingPosition()
+    public function testReadReturnsTheCorrectValueBeforeChangingPosition()
     {
         self::assertEquals('0123456789', $this->object->read(10));
     }
@@ -277,7 +277,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadReturnsTheCorrectValueAfterChangingPosition()
+    public function testReadReturnsTheCorrectValueAfterChangingPosition()
     {
         $this->object->setOffset(4);
         self::assertEquals('4567890123', $this->object->read(10));
@@ -286,7 +286,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadReturnsOnlyBytesLeft()
+    public function testReadReturnsOnlyBytesLeft()
     {
         $this->object->setOffset(120);
         self::assertEquals('01234567', $this->object->read(10));
@@ -295,7 +295,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadReturnsNothingAndFilePointerHasNotChangedIfNothingShouldBeRead()
+    public function testReadReturnsNothingAndFilePointerHasNotChangedIfNothingShouldBeRead()
     {
         self::assertEquals('', $this->object->read(0));
         self::assertEquals(0, ftell($this->fp));
@@ -304,7 +304,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadThrowsExpectedExceptionIfTryingToReadNegativeLength()
+    public function testReadThrowsExpectedExceptionIfTryingToReadNegativeLength()
     {
         $this->setExpectedException(
             'MetaSyntactical\\Io\\Exception\\DomainAssertion',
@@ -316,7 +316,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::readInt8
      */
-    public function testReadInt8()
+    public function testReadingInt8ReturnsExpectedValues()
     {
         self::assertEquals(48, $this->object->readInt8());
         self::assertEquals(49, $this->object->readInt8());
@@ -332,7 +332,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::readUInt8
      */
-    public function testReadUInt8()
+    public function testReadingUnsignedInt8ReturnsExpectedValues()
     {
         self::assertEquals(48, $this->object->readUInt8());
         self::assertEquals(49, $this->object->readUInt8());
@@ -351,7 +351,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::getEndianess
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testOnALittleEndianMachineReadInt16LE()
+    public function testOnLittleEndianMachineReadInt16LittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -368,7 +368,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::getEndianess
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testOnABigEndianMachineReadInt16LE()
+    public function testOnBigEndianMachineReadInt16LittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -385,7 +385,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::getEndianess
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testOnALittleEndianMachineReadInt16BE()
+    public function testOnLittleEndianMachineReadInt16BigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -400,7 +400,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::getEndianess
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testOnABigEndianMachineReadInt16BE()
+    public function testOnBigEndianMachineReadingInt16BigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -415,7 +415,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::getEndianess
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testOnAnAutodetectedEndianMachineReadInt16BE()
+    public function testAutodetectedEndianMachineReadInt16BigEndianReturnsExpectedValues()
     {
         self::assertEquals(12337, $this->object->readInt16BE());
     }
@@ -424,7 +424,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readInt16
      * @covers MetaSyntactical\Io\Reader::fromInt16
      */
-    public function testReadInt16()
+    public function testReadingInt16ReturnsExpectedValues()
     {
         self::assertEquals(12592, $this->object->readInt16());
     }
@@ -433,7 +433,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readUInt16LE
      * @covers MetaSyntactical\Io\Reader::fromUInt16
      */
-    public function testReadUInt16LE()
+    public function testReadingUnsignedInt16LittleEndianReturnsExpectedValues()
     {
         self::assertEquals(12592, $this->object->readUInt16LE());
         $this->advancedObject->skip(128);
@@ -444,7 +444,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readUInt16BE
      * @covers MetaSyntactical\Io\Reader::fromUInt16
      */
-    public function testReadUInt16BE()
+    public function testReadingUnsignedInt16BigEndianReturnsExpectedValues()
     {
         self::assertEquals(12337, $this->object->readUInt16BE());
         $this->advancedObject->skip(128);
@@ -455,7 +455,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readUInt16
      * @covers MetaSyntactical\Io\Reader::fromUInt16
      */
-    public function testReadUInt16()
+    public function testReadingUnsignedInt16ReturnsExpectedValues()
     {
         self::assertEquals(12592, $this->object->readUInt16());
         $this->advancedObject->skip(128);
@@ -467,7 +467,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::isBigEndian
      * @covers MetaSyntactical\Io\Reader::fromInt24
      */
-    public function testOnALittleEndianMachineReadInt24LE()
+    public function testOnLittleEndianMachineReadingInt24LittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -483,7 +483,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::isBigEndian
      * @covers MetaSyntactical\Io\Reader::fromInt24
      */
-    public function testOnABigEndianMachineReadInt24LE()
+    public function testOnBigEndianMachineReadInt24LittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -499,7 +499,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::isLittleEndian
      * @covers MetaSyntactical\Io\Reader::fromInt24
      */
-    public function testOnALittleEndianMachineReadInt24BE()
+    public function testOnLittleEndianMachineReadInt24BigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -515,7 +515,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::isLittleEndian
      * @covers MetaSyntactical\Io\Reader::fromInt24
      */
-    public function testOnABigEndianMachineReadInt24BE()
+    public function testOnBigEndianMachineReadInt24BigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -527,99 +527,118 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers MetaSyntactical\Io\Reader::readInt24BE
-     * @todo   Implement testReadInt24BE().
-     */
-    public function testReadInt24BE()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers MetaSyntactical\Io\Reader::readInt24
-     * @todo   Implement testReadInt24().
+     * @covers MetaSyntactical\Io\Reader::fromInt24
      */
-    public function testReadInt24()
+    public function testReadingInt24ReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals(842084352, $this->object->readInt24());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readUInt24LE
-     * @todo   Implement testReadUInt24LE().
+     * @covers MetaSyntactical\Io\Reader::fromUInt24
      */
-    public function testReadUInt24LE()
+    public function testReadingUnsignedInt24LittleEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals(842084352, $this->object->readUInt24LE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(2189524992, $this->advancedObject->readUInt24LE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readUInt24BE
-     * @todo   Implement testReadUInt24BE().
+     * @covers MetaSyntactical\Io\Reader::fromUInt24
      */
-    public function testReadUInt24BE()
+    public function testReadingUnsignedInt24BigEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals(3158322, $this->object->readUInt24BE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(8421762, $this->advancedObject->readUInt24BE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readUInt24
-     * @todo   Implement testReadUInt24().
+     * @covers MetaSyntactical\Io\Reader::fromUInt24
      */
-    public function testReadUInt24()
+    public function testReadingUnsignedInt24ReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals(842084352, $this->object->readUInt24());
+        $this->advancedObject->skip(128);
+        self::assertEquals(2189524992, $this->advancedObject->readUInt24());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readInt32LE
-     * @todo   Implement testReadInt32LE().
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
+     * @covers MetaSyntactical\Io\Reader::fromInt32
      */
-    public function testReadInt32LE()
+    public function testOnLittleEndianMachineReadingInt32LittleEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
+        self::assertEquals(858927408, $this->object->readInt32LE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(-2088599168, $this->advancedObject->readInt32LE());
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::readInt32LE
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
+     * @covers MetaSyntactical\Io\Reader::fromInt24
+     */
+    public function testOnBigEndianMachineReadingInt32LittleEndianReturnsExpectedValues()
+    {
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
+        self::assertEquals(808530483, $this->object->readInt32LE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(-2138996093, $this->advancedObject->readInt32LE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readInt32BE
-     * @todo   Implement testReadInt32BE().
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
+     * @covers MetaSyntactical\Io\Reader::fromInt32
      */
-    public function testReadInt32BE()
+    public function testOnLittleEndianMachineReadingInt32BigEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
+        self::assertEquals(808530483, $this->object->readInt32BE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(-2138996093, $this->advancedObject->readInt32BE());
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::readInt32BE
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
+     * @covers MetaSyntactical\Io\Reader::fromInt32
+     */
+    public function testOnBigEndianMachineReadingInt32BigEndianReturnsExpectedValues()
+    {
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
+        self::assertEquals(858927408, $this->object->readInt32BE());
+        $this->advancedObject->skip(128);
+        self::assertEquals(-2088599168, $this->advancedObject->readInt32BE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readInt32
-     * @todo   Implement testReadInt32().
+     * @covers MetaSyntactical\Io\Reader::fromInt32
      */
-    public function testReadInt32()
+    public function testReadingInt32ReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals(858927408, $this->object->readInt32());
     }
 
     /**
@@ -746,7 +765,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readString16
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadString16ReturnsEmptyStringIfRequestedLengthIsLower2()
+    public function testReadString16ReturnsEmptyStringIfRequestedLengthIsLower2()
     {
         $order = null;
         self::assertEquals('', $this->object->readString16(1, $order));
@@ -757,7 +776,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * @covers MetaSyntactical\Io\Reader::readString16
      * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testThatReadString16ReturnsExpectedStringIfRequestedLengthIsHighEnough()
+    public function testReadString16ReturnsExpectedStringIfRequestedLengthIsHighEnough()
     {
         $order = null;
         self::assertEquals('012', $this->object->readString16(3, $order));
@@ -833,7 +852,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::close
      */
-    public function testThatTheFilePointerIsInvalidAfterClosingFileInReader()
+    public function testTheFilePointerIsInvalidAfterClosingFileInReader()
     {
         $this->object->close();
         $this->setExpectedException(
@@ -846,7 +865,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers MetaSyntactical\Io\Reader::close
      */
-    public function testThatCloseDoesNotProduceErrorsOnConsecutiveCalls()
+    public function testCloseDoesNotProduceErrorsOnConsecutiveCalls()
     {
         $this->object->close();
         $this->object->close();
