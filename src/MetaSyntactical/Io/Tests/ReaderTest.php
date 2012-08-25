@@ -543,7 +543,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         self::assertEquals(842084352, $this->object->readUInt24LE());
         $this->advancedObject->skip(128);
-        self::assertEquals(2189524992, $this->advancedObject->readUInt24LE());
+        self::assertEquals('2189524992', (string)$this->advancedObject->readUInt24LE());
     }
 
     /**
@@ -565,7 +565,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         self::assertEquals(842084352, $this->object->readUInt24());
         $this->advancedObject->skip(128);
-        self::assertEquals(2189524992, $this->advancedObject->readUInt24());
+        self::assertEquals('2189524992', (string)$this->advancedObject->readUInt24());
     }
 
     /**
