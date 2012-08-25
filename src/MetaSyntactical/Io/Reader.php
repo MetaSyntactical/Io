@@ -8,6 +8,11 @@ use MetaSyntactical\Io\Exception\DomainAssertion;
 use MetaSyntactical\Io\Exception\OutOfRangeException;
 use MetaSyntactical\Io\Exception\InvalidArgumentException;
 
+/**
+ *
+ * @property      integer $offset    point of operation in stream
+ * @property-read integer $endianess endianess of the current machine
+ */
 class Reader
 {
     const MACHINE_ENDIAN_ORDER = 0;

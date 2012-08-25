@@ -875,25 +875,41 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::__get
-     * @todo   Implement test__get().
      */
-    public function test__get()
+    public function testGettingEndianessByMagicGetterReturnsValue()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $this->object->endianess;
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::__get
+     */
+    public function testGettingUnknownFieldByMagicGetterThrowsExpectedOutOfRangeException()
+    {
+        $this->setExpectedException(
+            '\\MetaSyntactical\\Io\\Exception\\OutOfRangeException',
+            'Unknown field'
         );
+        $this->object->unknownfield;
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::__set
-     * @todo   Implement test__set().
      */
-    public function test__set()
+    public function testSettingOffsetByMagicGetterDoesNotThrowException()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $this->object->offset = 0;
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::__set
+     */
+    public function testSettingUnknownFieldByMagicGetterThrowsExpectedOutOfRangeException()
+    {
+        $this->setExpectedException(
+            '\\MetaSyntactical\\Io\\Exception\\InvalidArgumentException',
+            'Unknown field'
         );
+        $this->object->unknownfield = false;
     }
 }
