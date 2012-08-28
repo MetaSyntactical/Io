@@ -2,7 +2,7 @@
     "name": "metasyntactical/io",
     "type": "library",
     "description": "The MetaSyntactical InputOutput component",
-    "keywords": ["library", "file", "io"],
+    "keywords": ["library", "component", "file", "io"],
     "homepage": "http://syntactical-sugar.com/projects/io",
     "license": "MIT",
     "authors": [
