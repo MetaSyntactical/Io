@@ -17,7 +17,7 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new FileReader(__DIR__ . '/Data/testfile.txt');
+        $this->object = new FileReader(__DIR__ . '/_Data/testfile.txt');
     }
 
     /**
