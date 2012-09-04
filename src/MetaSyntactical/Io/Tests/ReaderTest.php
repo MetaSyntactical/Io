@@ -869,11 +869,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(Reader::BIG_ENDIAN_ORDER, $order);
 
         $order = null;
-        self::assertEquals('abc', $this->advancedObjectWithNullBytes->readString16(
-            $this->advancedObjectWithNullBytes->getSize(),
-            $order,
-            true
-        ));
+        self::assertEquals(
+            'abc',
+            $this->advancedObjectWithNullBytes->readString16(
+                $this->advancedObjectWithNullBytes->getSize(),
+                $order,
+                true
+            )
+        );
         self::assertNull($order);
     }
 
