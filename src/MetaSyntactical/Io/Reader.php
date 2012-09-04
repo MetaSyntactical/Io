@@ -484,8 +484,10 @@ class Reader
     final public function readUInt32LE()
     {
         if (PHP_INT_SIZE < 8) {
+            // @codeCoverageIgnoreStart
             list(, $lo, $hi) = unpack('v*', $this->read(4));
             return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
+            // @codeCoverageIgnoreEnd
         } else {
             list(, $int) = unpack('V*', $this->read(4));
             return $int;
@@ -502,8 +504,10 @@ class Reader
     final public function readUInt32BE()
     {
         if (PHP_INT_SIZE < 8) {
+            // @codeCoverageIgnoreStart
             list(, $hi, $lo) = unpack('n*', $this->read(4));
             return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
+            // @codeCoverageIgnoreEnd
         } else {
             list(, $int) = unpack('N*', $this->read(4));
             return $int;
@@ -520,8 +524,10 @@ class Reader
     final public function readUInt32()
     {
         if (PHP_INT_SIZE < 8) {
+            // @codeCoverageIgnoreStart
             list(, $hi, $lo) = unpack('L*', $this->read(4));
             return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
+            // @codeCoverageIgnoreEnd
         } else {
             list(, $int) = unpack('L*', $this->read(4));
             return $int;
@@ -752,8 +758,10 @@ class Reader
 
         /* Fixes a bug in PHP versions earlier than Jan 25 2006 */
         if (implode('', unpack('H*', pack('H*', 'a'))) == 'a00') {
+            // @codeCoverageIgnoreStart
             $hex = substr($hex, 0, -1);
         }
+        // @codeCoverageIgnoreEnd
 
         return preg_replace('/^(.{8})(.{4})(.{4})(.{4})/', "\\1-\\2-\\3-\\4-", $hex);
     }

@@ -693,9 +693,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readFloatLE
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
      * @covers MetaSyntactical\Io\Reader::fromFloat
      */
-    public function testOnLittleEndianMachineReadingFloatAsLittleEndian()
+    public function testOnLittleEndianMachineReadingFloatAsLittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -708,9 +709,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readFloatLE
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
      * @covers MetaSyntactical\Io\Reader::fromFloat
      */
-    public function testOnBigEndianMachineReadingFloatAsLittleEndian()
+    public function testOnBigEndianMachineReadingFloatAsLittleEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -723,9 +725,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readFloatBE
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
      * @covers MetaSyntactical\Io\Reader::fromFloat
      */
-    public function testOnLittleEndianMachineReadingFloatAsBigEndian()
+    public function testOnLittleEndianMachineReadingFloatAsBigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -738,9 +741,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readFloatBE
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
      * @covers MetaSyntactical\Io\Reader::fromFloat
      */
-    public function testOnBigEndianMachineReadingFloatAsBigEndian()
+    public function testOnBigEndianMachineReadingFloatAsBigEndianReturnsExpectedValues()
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
@@ -753,37 +757,81 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readDoubleLE
-     * @todo   Implement testReadDoubleLE().
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
+     * @covers MetaSyntactical\Io\Reader::fromDouble
      */
-    public function testReadDoubleLE()
+    public function testOnLittleEndianMachineReadingDoubleAsLittleEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
+        self::assertEquals(9.9583343788967E-43, (string)$this->object->readDoubleLE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(2.3127085096212E+35, (string)$this->advancedObject->readDoubleLE());
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::readDoubleLE
+     * @covers MetaSyntactical\Io\Reader::isBigEndian
+     * @covers MetaSyntactical\Io\Reader::fromDouble
+     */
+    public function testOnBigEndianMachineReadingDoubleAsLittleEndianReturnsExpectedValues()
+    {
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
+        self::assertEquals(1.4850836463301E-76, (string)$this->object->readDoubleLE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(34.517677816225, (string)$this->advancedObject->readDoubleLE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readDoubleBE
-     * @todo   Implement testReadDoubleBE().
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
+     * @covers MetaSyntactical\Io\Reader::fromDouble
      */
-    public function testReadDoubleBE()
+    public function testOnLittleEndianMachineReadingDoubleAsBigEndianReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::LITTLE_ENDIAN_ORDER);
+        self::assertEquals(9.9583343788967E-43, (string)$this->object->readDoubleBE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(34.517677816225, (string)$this->advancedObject->readDoubleBE());
+    }
+
+    /**
+     * @covers MetaSyntactical\Io\Reader::readDoubleBE
+     * @covers MetaSyntactical\Io\Reader::isLittleEndian
+     * @covers MetaSyntactical\Io\Reader::fromDouble
+     */
+    public function testOnBigEndianMachineReadingDoubleAsBigEndianReturnsExpectedValues()
+    {
+        $reflection = new \ReflectionObject($this->object);
+        $endianess = $reflection->getProperty('endianess');
+        $endianess->setAccessible(true);
+        $endianess->setValue(Reader::BIG_ENDIAN_ORDER);
+        self::assertEquals(1.4850836463301E-76, (string)$this->object->readDoubleBE());
+        $this->advancedObject->skip(64);
+        self::assertEquals(2.3127085096212E+35, (string)$this->advancedObject->readDoubleBE());
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readString8
-     * @todo   Implement testReadString8().
+     * @covers MetaSyntactical\Io\Reader::read
      */
-    public function testReadString8()
+    public function testReadingString8ReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        self::assertEquals('012', $this->object->readString8(3));
+
+        self::assertEquals('äöü', $this->unicodeObject->readString8(6));
+
+        self::assertEquals(
+            'abc',
+            $this->advancedObjectWithNullBytes->readString8($this->advancedObjectWithNullBytes->getSize())
         );
     }
 
@@ -831,38 +879,34 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MetaSyntactical\Io\Reader::readHHex
-     * @todo   Implement testReadHHex().
      */
-    public function testReadHHex()
+    public function testReadingHighNibbleFirstHexadecimalValueReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals('30', $this->object->readHHex(1)); // reads "a"
+        self::assertEquals('31', $this->object->readHHex(1)); // reads "b"
+        self::assertEquals('32', $this->object->readHHex(1)); // reads "c"
+        self::assertEquals('333435', $this->object->readHHex(3)); // reads "def"
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readLHex
-     * @todo   Implement testReadLHex().
      */
-    public function testReadLHex()
+    public function testReadingLowNibbleFirstHexadecimalValueReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals('03', $this->object->readLHex(1)); // reads "a" nibble reversed
+        self::assertEquals('13', $this->object->readLHex(1)); // reads "b" nibble reversed
+        self::assertEquals('23', $this->object->readLHex(1)); // reads "c" nibble reversed
+        self::assertEquals('334353', $this->object->readLHex(3)); // reads "def" nibbles reversed
     }
 
     /**
      * @covers MetaSyntactical\Io\Reader::readGuid
-     * @todo   Implement testReadGuid().
      */
-    public function testReadGuid()
+    public function testReadingGuidReturnsExpectedValues()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        self::assertEquals('33323130-3534-3736-3839-303132333435', $this->object->readGuid());
+        $this->advancedObject->skip(64);
+        self::assertEquals('43424140-4544-4746-4849-4a4b4c4d4e4f', $this->advancedObject->readGuid());
     }
 
     /**
