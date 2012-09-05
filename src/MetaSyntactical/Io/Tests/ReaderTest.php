@@ -985,10 +985,4 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->object->unknownfield = false;
     }
-
-    public function testDummyPhpIntSize()
-    {
-        echo 'This is the value PHP_INT_SIZE is defined to: ' . PHP_INT_SIZE . PHP_EOL;
-        echo 'This is the value PHP_INT_MAX is defined to: ' . PHP_INT_MAX . PHP_EOL;
-    }
 }
