@@ -525,7 +525,11 @@ class Reader
     {
         if (PHP_INT_SIZE < 8) {
             // @codeCoverageIgnoreStart
-            list(, $hi, $lo) = unpack('S*', $this->read(4)) + array(0, 0, 0);
+            if ($this->isLittleEndian()) {
+                list(, $lo, $hi) = unpack('S*', $this->read(4));
+            } else {
+                list(, $hi, $lo) = unpack('S*', $this->read(4));
+            }
             return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
             // @codeCoverageIgnoreEnd
         } else {
