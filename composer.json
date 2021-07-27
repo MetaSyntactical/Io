@@ -16,11 +16,16 @@
         }
     ],
     "require": {
-        "php": ">=5.3.10"
+        "php": "8.0.* | 8.1.*"
     },
     "autoload": {
-        "psr-0": {
-            "MetaSyntactical": "src/"
+        "psr-4": {
+            "MetaSyntactical\\Io\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MetaSyntactical\\Io\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev"
