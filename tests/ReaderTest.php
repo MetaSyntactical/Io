@@ -4,7 +4,7 @@ namespace MetaSyntactical\Io\Tests;
 
 use MetaSyntactical\Io\Reader;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Reader
@@ -45,7 +45,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fp = fopen('php://memory', 'rw');
         for ($i = 0; $i < 128; $i++) {
@@ -94,16 +94,28 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $reflection = new \ReflectionObject($this->object);
         $endianess = $reflection->getProperty('endianess');
         $endianess->setAccessible(true);
         $endianess->setValue(Reader::MACHINE_ENDIAN_ORDER);
 
-        $this->object->close();
+        try {
+            $this->object->close();
+        } catch (\TypeError $exception) {
+            if ($exception->getMessage() !== 'fclose(): supplied resource is not a valid stream resource') {
+                throw $exception;
+            }
+        }
         unset($this->object);
-        @fclose($this->fp);
+        try {
+            @fclose($this->fp);
+        } catch (\TypeError $exception) {
+            if ($exception->getMessage() !== 'fclose(): supplied resource is not a valid stream resource') {
+                throw $exception;
+            }
+        }
         unset($this->fp);
 
         $this->advancedObject->close();
@@ -120,10 +132,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testReaderFailsConstructionIfProvidedDiscriminatorIsNoStreamResource()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'MetaSyntactical\\Io\\Exception\\InvalidResourceTypeException',
+        );
+        $this->expectExceptionMessage(
             'Invalid resource type (only resources of type stream are supported)'
         );
+
         new Reader('dummyString');
     }
 
@@ -150,10 +165,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testAvailableThrowsExpectedExceptionIfStreamHasBeenClosedFromOutside()
     {
         fclose($this->fp);
-        $this->setExpectedException(
+        $this->expectException(
             'MetaSyntactical\\Io\\Exception\\InvalidStreamException',
+        );
+        $this->expectExceptionMessage(
             'Cannot operate on a closed stream'
         );
+
         $this->object->available();
     }
 
@@ -164,10 +182,11 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testAvailableThrowsExpectedExceptionIfStreamHasBeenClosedByInterfaceMethod()
     {
         $this->object->close();
-        $this->setExpectedException(
+        $this->expectException(
             'MetaSyntactical\\Io\\Exception\\InvalidStreamException',
-            'Cannot operate on a closed stream'
         );
+        $this->expectExceptionMessage('Cannot operate on a closed stream');
+
         $this->object->available();
     }
 
@@ -259,10 +278,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testSkipThrowsExpectedExceptionIfTryingToSkipNegativeValue()
     {
         fseek($this->fp, 0, SEEK_END);
-        $this->setExpectedException(
-            'MetaSyntactical\\Io\\Exception\\DomainAssertion',
-            'Size cannot be negative'
-        );
+        $this->expectException('MetaSyntactical\\Io\\Exception\\DomainAssertion');
+        $this->expectExceptionMessage('Size cannot be negative');
+
         $this->object->skip(-10);
     }
 
@@ -306,10 +324,11 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadThrowsExpectedExceptionIfTryingToReadNegativeLength()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'MetaSyntactical\\Io\\Exception\\DomainAssertion',
-            'Length cannot be negative'
         );
+        $this->expectExceptionMessage('Length cannot be negative');
+
         $this->object->read(-1);
     }
 
@@ -928,10 +947,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testTheFilePointerIsInvalidAfterClosingFileInReader()
     {
         $this->object->close();
-        $this->setExpectedException(
-            'PHPUnit_Framework_Error_Warning',
-            'is not a valid stream resource'
-        );
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('is not a valid stream resource');
+
         self::assertFalse(ftell($this->fp));
     }
 
@@ -951,7 +969,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettingEndianessByMagicGetterReturnsValue()
     {
-        $this->object->endianess;
+        self::assertIsInt($this->object->endianess);
     }
 
     /**
@@ -959,10 +977,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettingUnknownFieldByMagicGetterThrowsExpectedOutOfRangeException()
     {
-        $this->setExpectedException(
-            '\\MetaSyntactical\\Io\\Exception\\OutOfRangeException',
-            'Unknown field'
-        );
+        $this->expectException('\\MetaSyntactical\\Io\\Exception\\OutOfRangeException',);
+        $this->expectExceptionMessage('Unknown field');
+
         $this->object->unknownfield;
     }
 
@@ -972,6 +989,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testSettingOffsetByMagicGetterDoesNotThrowException()
     {
         $this->object->offset = 0;
+        self::assertEquals(0, $this->object->offset);
     }
 
     /**
@@ -979,10 +997,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingUnknownFieldByMagicGetterThrowsExpectedOutOfRangeException()
     {
-        $this->setExpectedException(
-            '\\MetaSyntactical\\Io\\Exception\\InvalidArgumentException',
-            'Unknown field'
-        );
+        $this->expectException('\\MetaSyntactical\\Io\\Exception\\InvalidArgumentException');
+        $this->expectExceptionMessage('Unknown field');
+
         $this->object->unknownfield = false;
     }
 }

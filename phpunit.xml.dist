@@ -8,16 +8,15 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-         bootstrap="autoload.php.dist"
+         bootstrap="vendor/autoload.php"
         >
     <php>
         <ini name="intl.default_locale" value="en"/>
     </php>
 
     <testsuites>
-        <testsuite name="MetaSyntactical/Io Testsuite">
-            <directory>./src/MetaSyntactical/*/Tests/</directory>
+        <testsuite name="All Tests">
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -29,10 +28,7 @@
 
     <filter>
         <whitelist>
-            <directory>./src/MetaSyntactical/</directory>
-            <exclude>
-                <directory>./src/MetaSyntactical/*/Tests</directory>
-            </exclude>
+            <directory>./src/</directory>
         </whitelist>
     </filter>
 </phpunit>

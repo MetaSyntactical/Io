@@ -424,7 +424,7 @@ class Reader
      * @param string $value The binary data string.
      * @return integer
      */
-    private final function fromInt32($value)
+    private function fromInt32($value)
     {
         list(, $int) = unpack('l*', $value);
         return $int;
