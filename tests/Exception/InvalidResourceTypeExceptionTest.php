@@ -4,7 +4,7 @@ namespace MetaSyntactical\Io\Tests\Exception;
 
 use MetaSyntactical\Io\Exception\InvalidResourceTypeException;
 
-class InvalidResourceTypeExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidResourceTypeExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InvalidResourceTypeException
@@ -15,17 +15,9 @@ class InvalidResourceTypeExceptionTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new InvalidResourceTypeException;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
     }
 
     public function testThatClassProvidesTheExpectedInterfaces()

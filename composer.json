@@ -16,12 +16,27 @@
         }
     ],
     "require": {
-        "php": ">=5.3.10"
+        "php": "8.0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
-        "psr-0": {
-            "MetaSyntactical": "src/"
+        "psr-4": {
+            "MetaSyntactical\\Io\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "autoload-dev": {
+        "psr-4": {
+            "MetaSyntactical\\Io\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": {
+            "*": "dist"
+        }
+    }
 }

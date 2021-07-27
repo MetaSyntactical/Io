@@ -1,8 +1,0 @@
-language: php
-php:
-  - "5.4"
-  - "5.3"
-env:
-  - COMPOSER_COMMAND=install
-  - COMPOSER_COMMAND=update
-install: composer $COMPOSER_COMMAND

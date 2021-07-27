@@ -4,7 +4,7 @@ namespace MetaSyntactical\Io\Tests\Exception;
 
 use MetaSyntactical\Io\Exception\DomainAssertion;
 
-class DomainAssertionTest extends \PHPUnit_Framework_TestCase
+class DomainAssertionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DomainAssertion
@@ -15,17 +15,9 @@ class DomainAssertionTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new DomainAssertion;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
     }
 
     public function testThatClassProvidesTheExpectedInterfaces()

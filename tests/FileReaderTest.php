@@ -3,8 +3,9 @@
 namespace MetaSyntactical\Io\Tests;
 
 use MetaSyntactical\Io\FileReader;
+use PHPUnit\Framework\Error\Warning;
 
-class FileReaderTest extends \PHPUnit_Framework_TestCase
+class FileReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileReader
@@ -15,7 +16,7 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new FileReader(__DIR__ . '/_Data/testfile.txt');
     }
@@ -24,7 +25,7 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (isset($this->object) && is_object($this->object)) {
             $this->object->close();
@@ -34,10 +35,11 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testThat__constructThrowsExpectedExceptionIfGivenFilenameIsNoRealFile()
     {
-        $this->setExpectedException(
+        $this->expectException(
             '\\MetaSyntactical\\Io\\Exception\\FileNotFoundException',
-            'Unable to open file for reading'
         );
+        $this->expectExceptionMessage('Unable to open file for reading');
+
         new FileReader('php://memory');
     }
 
@@ -48,10 +50,13 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
     {
         $fp = $this->object->getFileDescriptor();
         unset($this->object);
-        $this->setExpectedException(
-            '\\PHPUnit_Framework_Error_Warning',
+        $this->expectException(
+            \TypeError::class,
+        );
+        $this->expectExceptionMessage(
             'is not a valid stream resource'
         );
+
         fread($fp, 1);
     }
 }
