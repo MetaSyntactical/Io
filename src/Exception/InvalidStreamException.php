@@ -2,7 +2,9 @@
 
 namespace MetaSyntactical\Io\Exception;
 
-class InvalidStreamException extends \RuntimeException implements Exception
+use RuntimeException;
+
+class InvalidStreamException extends RuntimeException implements Exception
 {
 
 }

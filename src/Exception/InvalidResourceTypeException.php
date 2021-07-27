@@ -2,7 +2,9 @@
 
 namespace MetaSyntactical\Io\Exception;
 
-class InvalidResourceTypeException extends \RuntimeException implements Exception
+use RuntimeException;
+
+class InvalidResourceTypeException extends RuntimeException implements Exception
 {
 
 }
