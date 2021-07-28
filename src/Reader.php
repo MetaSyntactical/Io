@@ -49,6 +49,10 @@ class Reader
      */
     public function __construct($fd)
     {
+        if (PHP_INT_SIZE < 8) {
+            throw new OutOfRangeException('PHP_INT_SIZE is lower than 8. Not supported.');
+        }
+
         if (!is_resource($fd) || get_resource_type($fd) !== 'stream') {
             throw new InvalidResourceTypeException(
                 'Invalid resource type (only resources of type stream are supported)'
@@ -198,6 +202,7 @@ class Reader
      */
     private function fromInt16(string $value): int
     {
+        /** @psalm-var int $int */
         [, $int] = unpack('s*', $value);
         return $int;
     }
@@ -254,6 +259,7 @@ class Reader
             self::LITTLE_ENDIAN_ORDER => 'v*',
         };
 
+        /** @psalm-var int $int */
         [, $int] = unpack(
             $format,
             $value
@@ -300,6 +306,7 @@ class Reader
      */
     private function fromInt24(string $value): int
     {
+        /** @psalm-var int $int */
         [, $int] = unpack('l*', $this->isLittleEndian() ? ("\x00" . $value) : ($value . "\x00"));
         return $int;
     }
@@ -347,10 +354,6 @@ class Reader
 
     /**
      * Returns machine endian ordered binary data as unsigned 24-bit integer.
-     *
-     * @param string  $value The binary data string.
-     * @param integer $order The byte order of the binary data string.
-     * @return integer
      */
     private function fromUInt24(string $value, int $order = self::MACHINE_ENDIAN_ORDER): int
     {
@@ -360,6 +363,7 @@ class Reader
             self::LITTLE_ENDIAN_ORDER => 'V*',
         };
 
+        /** @psalm-var int $int */
         [, $int] = unpack(
             $format,
             $this->isLittleEndian() ? ("\x00" . $value) : ($value . "\x00")
@@ -406,7 +410,8 @@ class Reader
      */
     private function fromInt32(string $value): int
     {
-        list(, $int) = unpack('l*', $value);
+        /** @psalm-var int $int */
+        [, $int] = unpack('l*', $value);
         return $int;
     }
 
@@ -459,13 +464,7 @@ class Reader
      */
     final public function readUInt32LE(): int
     {
-        if (PHP_INT_SIZE < 8) {
-            // @codeCoverageIgnoreStart
-            [, $lo, $hi] = unpack('v*', $this->read(4));
-            return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
-            // @codeCoverageIgnoreEnd
-        }
-
+        /** @psalm-var int $int */
         [, $int] = unpack('V*', $this->read(4));
         return $int;
     }
@@ -478,13 +477,7 @@ class Reader
      */
     final public function readUInt32BE(): int
     {
-        if (PHP_INT_SIZE < 8) {
-            // @codeCoverageIgnoreStart
-            [, $hi, $lo] = unpack('n*', $this->read(4));
-            return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
-            // @codeCoverageIgnoreEnd
-        }
-
+        /** @psalm-var int $int */
         [, $int] = unpack('N*', $this->read(4));
         return $int;
     }
@@ -497,17 +490,7 @@ class Reader
      */
     final public function readUInt32(): int
     {
-        if (PHP_INT_SIZE < 8) {
-            // @codeCoverageIgnoreStart
-            if ($this->isLittleEndian()) {
-                [, $lo, $hi] = unpack('S*', $this->read(4));
-            } else {
-                [, $hi, $lo] = unpack('S*', $this->read(4));
-            }
-            return $hi * (0xffff+1) + $lo; // eq $hi << 16 | $lo
-            // @codeCoverageIgnoreEnd
-        }
-
+        /** @psalm-var int $int */
         [, $int] = unpack('L*', $this->read(4)) + array(0, 0);
         return $int;
     }
@@ -524,6 +507,12 @@ class Reader
      */
     final public function readInt64LE(): float
     {
+        /**
+         * @psalm-var int $lolo
+         * @psalm-var int $lohi
+         * @psalm-var int $hilo
+         * @psalm-var int $hihi
+         */
         [, $lolo, $lohi, $hilo, $hihi] = unpack('v*', $this->read(8));
 
         return ($hihi * (0xffff+1) + $hilo) * (0xffffffff+1) + ($lohi * (0xffff+1) + $lolo);
@@ -541,6 +530,12 @@ class Reader
      */
     final public function readInt64BE(): float
     {
+        /**
+         * @psalm-var int $lolo
+         * @psalm-var int $lohi
+         * @psalm-var int $hilo
+         * @psalm-var int $hihi
+         */
         [, $hihi, $hilo, $lohi, $lolo] = unpack('n*', $this->read(8));
 
         return ($hihi * (0xffff+1) + $hilo) * (0xffffffff+1) + ($lohi * (0xffff+1) + $lolo);
@@ -552,6 +547,7 @@ class Reader
      */
     private function fromFloat(string $value): float
     {
+        /** @psalm-var float $float */
         [, $float] = unpack('f', $value);
         return $float;
     }
@@ -592,6 +588,7 @@ class Reader
      */
     private function fromDouble(string $value): float
     {
+        /** @psalm-var float $double */
         [, $double] = unpack('d', $value);
         return $double;
     }
@@ -683,6 +680,7 @@ class Reader
      */
     final public function readHHex(int $length): string
     {
+        /** @psalm-var string $hex */
         [$hex] = unpack('H*0', $this->read($length));
 
         return $hex;
@@ -697,6 +695,7 @@ class Reader
      */
     final public function readLHex(int $length): string
     {
+        /** @psalm-var string $hex */
         [$hex] = unpack('h*0', $this->read($length));
 
         return $hex;
@@ -711,14 +710,8 @@ class Reader
     final public function readGuid(): string
     {
         $C = @unpack('V1V/v2v/N2N', $this->read(16));
+        /** @psalm-var string $hex */
         [$hex] = @unpack('H*0', pack('NnnNN', $C['V'], $C['v1'], $C['v2'], $C['N1'], $C['N2']));
-
-        /* Fixes a bug in PHP versions earlier than Jan 25 2006 */
-        if (implode('', unpack('H*', pack('H*', 'a'))) === 'a00') {
-            // @codeCoverageIgnoreStart
-            $hex = substr($hex, 0, -1);
-        }
-        // @codeCoverageIgnoreEnd
 
         return preg_replace('/^(.{8})(.{4})(.{4})(.{4})/', "\\1-\\2-\\3-\\4-", $hex);
     }
