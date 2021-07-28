@@ -19,6 +19,7 @@
         "php": "8.0.*"
     },
     "require-dev": {
+        "infection/infection": "^0.24.0",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
