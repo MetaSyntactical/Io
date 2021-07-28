@@ -50,8 +50,10 @@ class Reader
     public function __construct($fd)
     {
         if (PHP_INT_SIZE < 8) {
+            // @codeCoverageIgnoreStart
             throw new OutOfRangeException('PHP_INT_SIZE is lower than 8. Not supported.');
         }
+        // @codeCoverageIgnoreEnd
 
         if (!is_resource($fd) || get_resource_type($fd) !== 'stream') {
             throw new InvalidResourceTypeException(
@@ -85,7 +87,7 @@ class Reader
      * @return resource
      * @throws InvalidStreamException if an I/O error occurs
      */
-    protected function checkStreamAvailable()
+    private function checkStreamAvailable()
     {
         if (is_null($this->fileDescriptor) || !is_resource($this->fileDescriptor)) {
             throw new InvalidStreamException('Cannot operate on a closed stream');
@@ -144,9 +146,6 @@ class Reader
     {
         if ($size < 0) {
             throw new DomainAssertion('Size cannot be negative');
-        }
-        if ($size === 0) {
-            return;
         }
 
         fseek($this->checkStreamAvailable(), $size, SEEK_CUR);
@@ -748,10 +747,12 @@ class Reader
     private function getEndianess(): int
     {
         if (0 === self::$endianessValue) {
+            // @codeCoverageIgnoreStart
             self::$endianessValue = $this->fromInt32("\x01\x00\x00\x00") === 1
                              ? self::LITTLE_ENDIAN_ORDER
                              : self::BIG_ENDIAN_ORDER;
         }
+        // @codeCoverageIgnoreEnd
         return self::$endianessValue;
     }
 
@@ -779,8 +780,9 @@ class Reader
      */
     public function __get(string $name)
     {
-        if (method_exists($this, 'get' . ucfirst(strtolower($name)))) {
-            return $this->{'get' . ucfirst(strtolower($name))}();
+        $methodName = 'get' . ucfirst(strtolower($name));
+        if (method_exists($this, $methodName)) {
+            return $this->$methodName();
         }
 
         throw new OutOfRangeException("Unknown field: {$name}");

@@ -219,6 +219,35 @@ class ReaderTest extends TestCase
         self::assertFalse(ftell($this->fp));
     }
 
+    public function testSkippingWithNegativeValueThrowsException(): void
+    {
+        $this->expectException(DomainAssertion::class);
+        $this->expectExceptionMessage('Size cannot be negative');
+        $this->object->skip(-1);
+    }
+
+    public function testSkippingZeroDoesNothing(): void
+    {
+        $beforePos = $this->object->getOffset();
+        $this->object->skip(0);
+        $afterPos = $this->object->getOffset();
+
+        self::assertEquals($beforePos, $afterPos);
+    }
+
+    public function testReadInt8(): void
+    {
+        $fp = fopen('php://memory', 'rwb');
+        fwrite($fp, chr(127));
+        fwrite($fp, chr(128));
+        fwrite($fp, chr(129));
+        fseek($fp, 0);
+        $object = new Reader($fp);
+        self::assertSame(127, $object->readInt8());
+        self::assertSame(-128, $object->readInt8());
+        self::assertSame(-127, $object->readInt8());
+    }
+
     /**
      * @covers \MetaSyntactical\Io\Reader::getSize
      */
@@ -428,7 +457,10 @@ class ReaderTest extends TestCase
      */
     public function testReadingInt16ReturnsExpectedValues(): void
     {
+        $beforeOffset = $this->object->getOffset();
         self::assertEquals(12592, $this->object->readInt16());
+        $afterOffset = $this->object->getOffset();
+        self::assertSame($beforeOffset + 2, $afterOffset);
     }
 
     /**
@@ -459,7 +491,10 @@ class ReaderTest extends TestCase
      */
     public function testReadingUnsignedInt16ReturnsExpectedValues(): void
     {
+        $beforeOffset = $this->object->getOffset();
         self::assertEquals(12592, $this->object->readUInt16());
+        $afterOffset = $this->object->getOffset();
+        self::assertSame($beforeOffset + 2, $afterOffset);
         $this->advancedObject->skip(64);
         self::assertEquals(16704, $this->advancedObject->readUInt16());
     }
@@ -474,7 +509,10 @@ class ReaderTest extends TestCase
         $endianness = (new ReflectionObject($this->object))->getProperty('endianessValue');
         $endianness->setAccessible(true);
         $endianness->setValue(Reader::LITTLE_ENDIAN_ORDER);
+        $beforeOffset = $this->object->getOffset();
         self::assertEquals(842084352, $this->object->readInt24LE());
+        $afterOffset = $this->object->getOffset();
+        self::assertSame($beforeOffset + 3, $afterOffset);
         $this->advancedObject->skip(64);
         self::assertEquals(1111572480, $this->advancedObject->readInt24LE());
     }
@@ -489,7 +527,10 @@ class ReaderTest extends TestCase
         $endianness = (new ReflectionObject($this->object))->getProperty('endianessValue');
         $endianness->setAccessible(true);
         $endianness->setValue(Reader::BIG_ENDIAN_ORDER);
+        $beforeOffset = $this->object->getOffset();
         self::assertEquals(3158322, $this->object->readInt24LE());
+        $afterOffset = $this->object->getOffset();
+        self::assertSame($beforeOffset + 3, $afterOffset);
         $this->advancedObject->skip(64);
         self::assertEquals(4211010, $this->advancedObject->readInt24LE());
     }

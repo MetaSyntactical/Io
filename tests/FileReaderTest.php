@@ -3,7 +3,7 @@
 namespace MetaSyntactical\Io\Tests;
 
 use MetaSyntactical\Io\FileReader;
-use PHPUnit\Framework\Error\Warning;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use MetaSyntactical\Io\Exception\FileNotFoundException;
 use TypeError;
@@ -41,6 +41,24 @@ class FileReaderTest extends TestCase
         $this->expectExceptionMessage('Unable to open file for reading');
 
         new FileReader('php://memory');
+    }
+
+    public function testThat__constructThrowsExpectedExceptionIfGivenFilenameIsNotReadable(): void
+    {
+        $structure = [
+            'dir' => [
+                'file' => 'dummy_file',
+            ],
+        ];
+        vfsStream::setup('root', null, $structure);
+        chmod('vfs://root/dir/file', '0000');
+
+        $this->expectException(
+            FileNotFoundException::class,
+        );
+        $this->expectExceptionMessage('Unable to open file for reading: vfs://root/dir/file');
+
+        new FileReader('vfs://root/dir/file');
     }
 
     /**

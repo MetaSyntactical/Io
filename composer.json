@@ -21,6 +21,7 @@
     "require-dev": {
         "infection/infection": "^0.24.0",
         "phpunit/phpunit": "^9.5",
+        "mikey179/vfsstream": "^v1.6.9",
         "vimeo/psalm": "^4.8.1"
     },
     "autoload": {

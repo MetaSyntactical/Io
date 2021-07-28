@@ -4,7 +4,7 @@ namespace MetaSyntactical\Io;
 
 use MetaSyntactical\Io\Exception\FileNotFoundException;
 
-class FileReader extends Reader
+final class FileReader extends Reader
 {
     /**
      * Constructs the Zend_Io_FileReader class with given path to the file. By
