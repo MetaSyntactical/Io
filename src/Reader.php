@@ -28,7 +28,8 @@ class Reader
     /**
      * The resource identifier of the stream.
      *
-     * @var resource
+     * @var resource|null
+     * @psalm-var resource|closed-resource|null
      */
     protected $fileDescriptor = null;
 
@@ -43,6 +44,7 @@ class Reader
      * Constructs the Zend_Io_Reader class with given open file descriptor.
      *
      * @param resource $fd The file descriptor.
+     * @psalm-param mixed $fd
      * @throws InvalidResourceTypeException if given file descriptor is not valid
      */
     public function __construct($fd)
@@ -76,13 +78,16 @@ class Reader
     /**
      * Checks if a stream is available.
      *
+     * @return resource
      * @throws InvalidStreamException if an I/O error occurs
      */
-    protected function checkStreamAvailable(): void
+    protected function checkStreamAvailable()
     {
         if (is_null($this->fileDescriptor) || !is_resource($this->fileDescriptor)) {
             throw new InvalidStreamException('Cannot operate on a closed stream');
         }
+
+        return $this->fileDescriptor;
     }
 
     /**
@@ -92,8 +97,7 @@ class Reader
      */
     public function getOffset(): int
     {
-        $this->checkStreamAvailable();
-        return ftell($this->fileDescriptor);
+        return ftell($this->checkStreamAvailable());
     }
 
     /**
@@ -105,8 +109,7 @@ class Reader
      */
     public function setOffset(int $offset): void
     {
-        $this->checkStreamAvailable();
-        fseek($this->fileDescriptor, $offset < 0 ? $this->getSize() + $offset : $offset);
+        fseek($this->checkStreamAvailable(), $offset < 0 ? $this->getSize() + $offset : $offset);
     }
 
     /**
@@ -124,7 +127,7 @@ class Reader
      */
     public function getFileDescriptor()
     {
-        return $this->fileDescriptor;
+        return $this->checkStreamAvailable();
     }
 
     /**
@@ -141,8 +144,8 @@ class Reader
         if ($size === 0) {
             return;
         }
-        $this->checkStreamAvailable();
-        fseek($this->fileDescriptor, $size, SEEK_CUR);
+
+        fseek($this->checkStreamAvailable(), $size, SEEK_CUR);
     }
 
     /**
@@ -159,8 +162,8 @@ class Reader
         if ($length === 0) {
             return '';
         }
-        $this->checkStreamAvailable();
-        return fread($this->fileDescriptor, $length);
+
+        return fread($this->checkStreamAvailable(), $length);
     }
 
     /**
@@ -728,8 +731,7 @@ class Reader
      */
     public function reset(): void
     {
-        $this->checkStreamAvailable();
-        fseek($this->fileDescriptor, 0);
+        fseek($this->checkStreamAvailable(), 0);
     }
 
     /**
@@ -739,8 +741,10 @@ class Reader
      */
     public function close(): void
     {
-        if ($this->fileDescriptor !== null) {
+        if (is_resource($this->fileDescriptor)) {
             @fclose($this->fileDescriptor);
+        }
+        if ($this->fileDescriptor !== null) {
             $this->fileDescriptor = null;
         }
     }
