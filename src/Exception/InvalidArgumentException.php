@@ -2,7 +2,9 @@
 
 namespace MetaSyntactical\Io\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements Exception
+use InvalidArgumentException as BaseInvalidArgumentException;
+
+class InvalidArgumentException extends BaseInvalidArgumentException implements Exception
 {
 
 }

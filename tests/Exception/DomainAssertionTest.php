@@ -2,14 +2,15 @@
 
 namespace MetaSyntactical\Io\Tests\Exception;
 
+use DomainException;
+use LogicException;
 use MetaSyntactical\Io\Exception\DomainAssertion;
+use MetaSyntactical\Io\Exception\Exception;
+use PHPUnit\Framework\TestCase;
 
-class DomainAssertionTest extends \PHPUnit\Framework\TestCase
+class DomainAssertionTest extends TestCase
 {
-    /**
-     * @var DomainAssertion
-     */
-    protected $object;
+    protected DomainAssertion $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,10 +21,10 @@ class DomainAssertionTest extends \PHPUnit\Framework\TestCase
         $this->object = new DomainAssertion;
     }
 
-    public function testThatClassProvidesTheExpectedInterfaces()
+    public function testThatClassProvidesTheExpectedInterfaces(): void
     {
-        self::assertInstanceOf('\\LogicException', $this->object);
-        self::assertInstanceOf('\\DomainException', $this->object);
-        self::assertInstanceOf('\\MetaSyntactical\\Io\\Exception\\Exception', $this->object);
+        self::assertInstanceOf(LogicException::class, $this->object);
+        self::assertInstanceOf(DomainException::class, $this->object);
+        self::assertInstanceOf(Exception::class, $this->object);
     }
 }

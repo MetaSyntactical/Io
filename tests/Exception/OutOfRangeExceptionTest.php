@@ -2,14 +2,15 @@
 
 namespace MetaSyntactical\Io\Tests\Exception;
 
+use LogicException;
 use MetaSyntactical\Io\Exception\OutOfRangeException;
+use OutOfRangeException as BaseOutOfRangeException;
+use PHPUnit\Framework\TestCase;
+use MetaSyntactical\Io\Exception\Exception;
 
-class OutOfRangeExceptionTest extends \PHPUnit\Framework\TestCase
+class OutOfRangeExceptionTest extends TestCase
 {
-    /**
-     * @var OutOfRangeException
-     */
-    protected $object;
+    protected OutOfRangeException $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,10 +21,10 @@ class OutOfRangeExceptionTest extends \PHPUnit\Framework\TestCase
         $this->object = new OutOfRangeException;
     }
 
-    public function testThatClassProvidesTheExpectedInterfaces()
+    public function testThatClassProvidesTheExpectedInterfaces(): void
     {
-        self::assertInstanceOf('\\LogicException', $this->object);
-        self::assertInstanceOf('\\OutOfRangeException', $this->object);
-        self::assertInstanceOf('\\MetaSyntactical\\Io\\Exception\\Exception', $this->object);
+        self::assertInstanceOf(LogicException::class, $this->object);
+        self::assertInstanceOf(BaseOutOfRangeException::class, $this->object);
+        self::assertInstanceOf(Exception::class, $this->object);
     }
 }

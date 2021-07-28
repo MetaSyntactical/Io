@@ -2,14 +2,15 @@
 
 namespace MetaSyntactical\Io\Tests\Exception;
 
+use InvalidArgumentException as BaseInvalidArgumentException;
+use LogicException;
 use MetaSyntactical\Io\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use MetaSyntactical\Io\Exception\Exception;
 
-class InvalidArgumentExceptionTest extends \PHPUnit\Framework\TestCase
+class InvalidArgumentExceptionTest extends TestCase
 {
-    /**
-     * @var InvalidArgumentException
-     */
-    protected $object;
+    protected InvalidArgumentException $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,10 +21,10 @@ class InvalidArgumentExceptionTest extends \PHPUnit\Framework\TestCase
         $this->object = new InvalidArgumentException;
     }
 
-    public function testThatClassProvidesTheExpectedInterfaces()
+    public function testThatClassProvidesTheExpectedInterfaces(): void
     {
-        self::assertInstanceOf('\\LogicException', $this->object);
-        self::assertInstanceOf('\\InvalidArgumentException', $this->object);
-        self::assertInstanceOf('\\MetaSyntactical\\Io\\Exception\\Exception', $this->object);
+        self::assertInstanceOf(LogicException::class, $this->object);
+        self::assertInstanceOf(BaseInvalidArgumentException::class, $this->object);
+        self::assertInstanceOf(Exception::class, $this->object);
     }
 }

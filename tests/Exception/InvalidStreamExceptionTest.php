@@ -3,13 +3,13 @@
 namespace MetaSyntactical\Io\Tests\Exception;
 
 use MetaSyntactical\Io\Exception\InvalidStreamException;
+use PHPUnit\Framework\TestCase;
+use MetaSyntactical\Io\Exception\Exception;
+use RuntimeException;
 
-class InvalidStreamExceptionTest extends \PHPUnit\Framework\TestCase
+class InvalidStreamExceptionTest extends TestCase
 {
-    /**
-     * @var InvalidStreamException
-     */
-    protected $object;
+    protected InvalidStreamException $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,9 +20,9 @@ class InvalidStreamExceptionTest extends \PHPUnit\Framework\TestCase
         $this->object = new InvalidStreamException;
     }
 
-    public function testThatClassProvidesTheExpectedInterfaces()
+    public function testThatClassProvidesTheExpectedInterfaces(): void
     {
-        self::assertInstanceOf('\\RuntimeException', $this->object);
-        self::assertInstanceOf('\\MetaSyntactical\\Io\\Exception\\Exception', $this->object);
+        self::assertInstanceOf(RuntimeException::class, $this->object);
+        self::assertInstanceOf(Exception::class, $this->object);
     }
 }

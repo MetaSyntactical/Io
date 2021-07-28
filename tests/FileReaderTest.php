@@ -3,14 +3,14 @@
 namespace MetaSyntactical\Io\Tests;
 
 use MetaSyntactical\Io\FileReader;
-use PHPUnit\Framework\Error\Warning;
+use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use MetaSyntactical\Io\Exception\FileNotFoundException;
+use TypeError;
 
-class FileReaderTest extends \PHPUnit\Framework\TestCase
+class FileReaderTest extends TestCase
 {
-    /**
-     * @var FileReader
-     */
-    protected $object;
+    protected FileReader $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -33,25 +33,43 @@ class FileReaderTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testThat__constructThrowsExpectedExceptionIfGivenFilenameIsNoRealFile()
+    public function testThat__constructThrowsExpectedExceptionIfGivenFilenameIsNoRealFile(): void
     {
         $this->expectException(
-            '\\MetaSyntactical\\Io\\Exception\\FileNotFoundException',
+            FileNotFoundException::class,
         );
         $this->expectExceptionMessage('Unable to open file for reading');
 
         new FileReader('php://memory');
     }
 
+    public function testThat__constructThrowsExpectedExceptionIfGivenFilenameIsNotReadable(): void
+    {
+        $structure = [
+            'dir' => [
+                'file' => 'dummy_file',
+            ],
+        ];
+        vfsStream::setup('root', null, $structure);
+        chmod('vfs://root/dir/file', '0000');
+
+        $this->expectException(
+            FileNotFoundException::class,
+        );
+        $this->expectExceptionMessage('Unable to open file for reading: vfs://root/dir/file');
+
+        new FileReader('vfs://root/dir/file');
+    }
+
     /**
-     * @covers MetaSyntactical\Io\FileReader::__destruct
+     * @covers \MetaSyntactical\Io\FileReader::__destruct
      */
-    public function testThat__destructClosesFileResourceCorrectly()
+    public function testThat__destructClosesFileResourceCorrectly(): void
     {
         $fp = $this->object->getFileDescriptor();
         unset($this->object);
         $this->expectException(
-            \TypeError::class,
+            TypeError::class,
         );
         $this->expectExceptionMessage(
             'is not a valid stream resource'
