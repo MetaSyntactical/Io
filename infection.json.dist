@@ -8,5 +8,5 @@
     "text": "php://stderr"
   },
   "minMsi": 84,
-  "minCoveredMsi": 100
+  "minCoveredMsi": 85
 }
